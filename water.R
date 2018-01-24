@@ -39,19 +39,36 @@ interaction_ols<-function(water_qualitys,emissions,other_factors,data_source){
         #print(other_factor_item)
         
         xnam<-c(emissions_item,other_factor_item)
-        f<-as.formula(paste(paste(water_qualitys," ~ "),paste(xnam,collapse = "*")))
         
-        #lm_fit<-lm(as.formula(paste(paste(water_qualitys," ~ "),paste(xnam,collapse = "*"))),data=data_source)
-        #lm_list<-c(lm_list,lm_fit)
+        lm_item<-lm(as.formula(paste(paste(water_qualitys," ~ "),paste(xnam,collapse = "*"))),data=data_source)
+        
+        f <- summary(lm_item)$fstatistic
+        p <- pf(f[1],f[2],f[3],lower.tail=F)
+        if(p<0.2){
+          sink("lm.txt",append = TRUE)
+          print(summary(lm_item))
+          sink()
+        }
       }
     }
   }
-  return(lm_list)
 }
 
 lm_list=interaction_ols(water_quality_list,emissions_list,other_factor_manage_list,beijing)
 
+
+
 #lm_item<-lm(COD~1+wastewater_total_discharge*industrial_wastewater_treatment_facilities,data=beijing)
 #summary(lm_item)
 
-#summary(lm_beijing)
+#summary(lm_list)
+
+
+water_qualitys<-"COD"
+emissions_item<-"wastewater_total_discharge"
+other_factor_item<-"industrial_wastewater_treatment_facilities"
+xnam<-c(emissions_item,other_factor_item)
+
+lm_item<-lm(as.formula(paste(paste(water_qualitys," ~ "),paste(xnam,collapse = "*"))),data=beijing)
+f <- summary(lm_item)$fstatistic
+p <- pf(f[1],f[2],f[3],lower.tail=F)
