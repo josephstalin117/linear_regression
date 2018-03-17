@@ -85,9 +85,38 @@ def check_lack_col(normal_df,lack_df):
 #check_lack_col(east['shandong'],east['shanghai'])
 
 #drop xizhang data
-
 west.pop('xizang',0)
 
+pd_size=-1
+pd_size_province=""    
+for x in east:
+    if pd_size==-1 or len(east[x].columns)<pd_size:
+            pd_size=len(east[x].columns)
+            pd_size_province=x
+
+east_pd=pd.DataFrame(columns=[x for x in east[pd_size_province]])
+
+## get east sum
+for year in years:
+    for col in east_pd.columns:
+        if col!='year' or col!='province':
+            for province in east:
+                east_pd[col][year-2006]+=east[province][col][year-2006]
+            
+
+
+def area_merge(area_dict):
+    pd_size=0
+    pd_size_province=""    
+    for x in area_dict:
+        if pd_size==0 or len(east[x].columns)<pd_size:
+            pd_size=len(east[x].columns)
+            
+    area_len=min([len(east[x].columns) for x in east])
+    area_pd = pd.DataFrame(columns=['a', 'b', 'c', 'd', 'e'])
+    
+    
+    
 
 
 
