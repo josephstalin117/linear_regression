@@ -43,28 +43,52 @@ for province in provinces:
 
 ## Regional division
 
-east=["beijing","tianjin","hebei","shanghai","jiangsu","zhejiang","fujian","shandong","guangdong","hainan"]
-central=["shanxi","anhui","jiangxi","henan","hubei","hunan"]
-west=["neimenggu","guangxi","chongqing","sichuan","guizhou","yunnan","xizang","shaanxi","gansu","qinghai","ningxia","xinjiang"]
-northeast=["liaoning","jilin","heilongjiang"]
-
-east_df={}
-central_df={}
-west_df={}
-northeast_df={}
+east={}
+central={}
+west={}
+northeast={}
 
 for x in provinces:
-    if x in east:
-        east_df[x]=df_dict[x]
-    elif x in central:
-        central_df[x]=df_dict[x]
-    elif x in west:
-        west_df[x]=df_dict[x]
-    elif x in northeast:
-        northeast_df[x]=df_dict[x]
+    if x in ["beijing","tianjin","hebei","shanghai","jiangsu","zhejiang","fujian","shandong","guangdong","hainan"]:
+        east[x]=df_dict[x]
+    elif x in ["shanxi","anhui","jiangxi","henan","hubei","hunan"]:
+        central[x]=df_dict[x]
+    elif x in ["neimenggu","guangxi","chongqing","sichuan","guizhou","yunnan","xizang","shaanxi","gansu","qinghai","ningxia","xinjiang"]:
+        west[x]=df_dict[x]
+    elif x in ["liaoning","jilin","heilongjiang"]:
+        northeast[x]=df_dict[x]
     else:
         print("error")
         print(x)
 
+#check lack col of some province
+def check_lack_col(normal_df,lack_df):
+    normal_list=[x for x in normal_df]
+    lack_list=[x for x in lack_df]
+    if len(normal_list)<len(lack_list):
+        print('fuck you!')
+    elif len(normal_list)<len(lack_list):
+        print('equal length')
+    else:
+        i,j=0,0
+        while(i<len(normal_list) and j<len(lack_list)):
+            if normal_list[i]==lack_list[j]:
+                i+=1
+                j+=1
+            else:
+                print(normal_list[i])
+                i+=1
+        while(i<len(normal_list)):
+            print(normal_list[i])
 
-        
+
+#check_lack_col(east['shandong'],east['shanghai'])
+
+#drop xizhang data
+
+west.pop('xizang',0)
+
+
+
+
+
