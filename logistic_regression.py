@@ -34,9 +34,37 @@ def data_cleaning(df):
     for col in df:
         if df[col].isnull().sum()<=2 and df[col].dtype!='object':
             df[col]=df[col].fillna(df[col].mean())
+    #drop nan
     df=df.dropna(axis=1,how='any')
     return df
 
-
 for province in provinces:
     df_dict[province]=data_cleaning(df_dict[province])
+
+## Regional division
+
+east=["beijing","tianjin","hebei","shanghai","jiangsu","zhejiang","fujian","shandong","guangdong","hainan"]
+central=["shanxi","anhui","jiangxi","henan","hubei","hunan"]
+west=["neimenggu","guangxi","chongqing","sichuan","guizhou","yunnan","xizang","shaanxi","gansu","qinghai","ningxia","xinjiang"]
+northeast=["liaoning","jilin","heilongjiang"]
+
+east_df={}
+central_df={}
+west_df={}
+northeast_df={}
+
+for x in provinces:
+    if x in east:
+        east_df[x]=df_dict[x]
+    elif x in central:
+        central_df[x]=df_dict[x]
+    elif x in west:
+        west_df[x]=df_dict[x]
+    elif x in northeast:
+        northeast_df[x]=df_dict[x]
+    else:
+        print("error")
+        print(x)
+
+
+        
