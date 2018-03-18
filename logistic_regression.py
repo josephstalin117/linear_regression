@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from numpy import nan as Nan
 from pandas import Series,DataFrame
 
 ## data polymerization
@@ -36,6 +37,9 @@ def data_cleaning(df):
             df[col]=df[col].fillna(df[col].mean())
     #drop nan
     df=df.dropna(axis=1,how='any')
+    #convert percent string to float
+    for x in ['quality_3','quality_4','quality_5']:
+        df[x]=df[x].str.rstrip('%').astype('float') / 100.0   
     return df
 
 for province in provinces:
@@ -94,26 +98,32 @@ for x in east:
             pd_size=len(east[x].columns)
             pd_size_province=x
 
-east_pd=pd.DataFrame(columns=[x for x in east[pd_size_province]])
+east_df=pd.DataFrame(columns=[x for x in east[pd_size_province]])
 
 ## get east sum
+i=0
 for year in years:
-    for col in east_pd.columns:
-        if col!='year' or col!='province':
+    for col in east_df.columns:
+        if col=='province':
+            east_df.loc[i] = pd.Series([np.nan if col=='province' or col=='year' else 0 for col in east_df.columns],index=[x for x in east_df.columns])
+            east_df.loc[i]['province']='east'
+        elif col=='year':
+            east_df.loc[i]['year']=year
+        else:
             for province in east:
-                east_pd[col][year-2006]+=east[province][col][year-2006]
-            
+                east_df[col][i]+=east[province][col][year-2006]
+        if col==east_df.columns[-1]:
+            i+=1
 
 
 def area_merge(area_dict):
-    pd_size=0
+    pd_size=-1
     pd_size_province=""    
     for x in area_dict:
-        if pd_size==0 or len(east[x].columns)<pd_size:
+        if pd_size==-1 or len(east[x].columns)<pd_size:
             pd_size=len(east[x].columns)
-            
-    area_len=min([len(east[x].columns) for x in east])
-    area_pd = pd.DataFrame(columns=['a', 'b', 'c', 'd', 'e'])
+            pd_size_province=x
+    area_df=pd.DataFrame(columns=[x for x in area_dict[pd_size_province]])
     
     
     
