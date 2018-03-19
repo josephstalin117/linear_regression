@@ -91,42 +91,43 @@ def check_lack_col(normal_df,lack_df):
 #drop xizhang data
 west.pop('xizang',0)
 
-pd_size=-1
-pd_size_province=""    
-for x in east:
-    if pd_size==-1 or len(east[x].columns)<pd_size:
-            pd_size=len(east[x].columns)
-            pd_size_province=x
 
-east_df=pd.DataFrame(columns=[x for x in east[pd_size_province]])
-
-## get east sum
-i=0
-for year in years:
-    for col in east_df.columns:
-        if col=='province':
-            east_df.loc[i] = pd.Series([np.nan if col=='province' or col=='year' else 0 for col in east_df.columns],index=[x for x in east_df.columns])
-            east_df.loc[i]['province']='east'
-        elif col=='year':
-            east_df.loc[i]['year']=year
-        else:
-            for province in east:
-                east_df[col][i]+=east[province][col][year-2006]
-        if col==east_df.columns[-1]:
-            i+=1
-
-
-def area_merge(area_dict):
+def area_merge(area_dict,area_name='uname'):
     pd_size=-1
-    pd_size_province=""    
+    pd_size_province=""
     for x in area_dict:
-        if pd_size==-1 or len(east[x].columns)<pd_size:
-            pd_size=len(east[x].columns)
+        if pd_size==-1 or len(area_dict[x].columns)<pd_size:
+            pd_size=len(area_dict[x].columns)
             pd_size_province=x
+
     area_df=pd.DataFrame(columns=[x for x in area_dict[pd_size_province]])
-    
-    
-    
+    ## get sum
+    i=0
+    for year in years:
+        for col in area_df.columns:
+            if col=='province':
+                area_df.loc[i]=pd.Series([np.nan if col=='province' or col=='year' else 0 for col in area_df.columns],index=[x for x in area_df.columns])
+            elif col=='year':
+                area_df.loc[i]['year']=year
+            else:
+                for province in area_dict:
+                    area_df[col][i]+=area_dict[province][col][year-2006]
+            if col==area_df.columns[-1]:
+                i+=1
+    area_df['province']=area_name
+    return area_df
+
+east_df=pd.DataFrame()
+west_df=pd.DataFrame()
+central_df=pd.DataFrame()
+northeast_df=pd.DataFrame()
+
+east_df=area_merge(east,'east')
+west_df=area_merge(west,'west')
+central_df=area_merge(central,'central')
+northeast_df=area_merge(northeast,'northeast')
+
+
 
 
 
