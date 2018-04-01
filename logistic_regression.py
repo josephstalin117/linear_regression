@@ -114,6 +114,11 @@ def area_merge(area_dict,area_name='uname'):
                     area_df[col][i]+=area_dict[province][col][year-2006]
             if col==area_df.columns[-1]:
                 i+=1
+    cal_avarage = ['proportion_urban_population','tertiary_industry','temperature','COD','NH3','quality_3',
+ 'quality_4','quality_5','urban_sewage_treatment_rate','industrial_wastewater_reuse','investment_environmental_GDP']
+    for l in list(area_df.columns[2:]):
+        if l in cal_avarage:
+         area_df[l] = area_df[l]/len(area_dict)
     area_df['province']=area_name
     return area_df
 
@@ -128,6 +133,8 @@ central_df=area_merge(central,'central')
 northeast_df=area_merge(northeast,'northeast')
 
 
+    
+       
 
 
 
