@@ -120,6 +120,7 @@ def area_merge(area_dict,area_name='uname'):
         if l in cal_avarage:
          area_df[l] = area_df[l]/len(area_dict)
     area_df['province']=area_name
+    area_df.to_csv('csv/'+area_name+'.csv',encoding='utf-8')
     return area_df
 
 east_df=pd.DataFrame()
