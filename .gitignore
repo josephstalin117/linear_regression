@@ -2,3 +2,5 @@
 *.csv
 *.xlsx
 csv/
+*.txt
+*.json
